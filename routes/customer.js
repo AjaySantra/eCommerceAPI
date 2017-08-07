@@ -22,7 +22,7 @@ exports.add = function(req, res){
 exports.edit = function(req, res){
   var id = req.params.id;
   req.getConnection(function(err,connection){
-     connection.query('SELECT * FROM customer WHERE id = ?',[id],function(err,rows)
+     connection.query('SELECT * FROM customers WHERE id = ?',[id],function(err,rows)
         {
             if(err)
                 console.log("Error Selecting : %s ",err );
