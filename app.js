@@ -7,47 +7,33 @@ var express = require('express');
 var routes = require('./routes');
 var http = require('http');
 var path = require('path');
-
-// // // var logger = require('logger');
-// // var errorHandler = require('errorhandler');
-// // var methodOverride = require('method-override');
-// // var json = require('json');
-// // var urlencoded = require('urlencode');
-// // var favicon =require('favicon');
+var bodyParser = require('body-parser');
 
 //load customers route
-var customers = require('./routes/customer.js'); 
-var index = require('./routes/index.js'); 
+var customers = require('./routes/customer'); 
+// var index = require('./routes/index.js'); 
 
 var app = express();
 var connection  = require('express-myconnection'); 
 var mysql = require('mysql');
 
+
+// configure app to use bodyParser()
+// this will let us get the data from a POST
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+
+// var router = express.Router();  
 // all environments
 app.set('port', process.env.PORT || 4300);
-// app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'ejs');
-// // // app.use(favicon);
-// // // // app.use(logger);
-// // // // app.use(json);
-// // // app.use(urlencoded);
-// // // app.use(methodOverride());
-// // // app.use(express.static(path.join(__dirname, 'public')));
-// // // // development only
-// // // if ('development' == app.get('env')) {
-// // //   app.use(errorHandler());
-// // // }
-/*------------------------------------------
-    connection peer, register as middleware
-    type koneksi : single,pool and request 
--------------------------------------------*/
+
 app.use(
     connection(mysql,{
-        host: '192.168.0.250',
+        host: '127.0.0.1',
         user: 'root',
-        password : 'Password@1',
+        password : 'ajay@123',
         port : 3306, //port mysql
-        database:'nodejstest'
+        database:'eCommerceDB'
     },'request')
 );//route index, hello world
 
