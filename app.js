@@ -47,6 +47,8 @@ app.use(
     }, 'request')
 );
 
+mysql.createConnection({multipleStatements: true});
+
 //===========================================
 // Handle Customer Lavel data
 var customers = require('./routes/customer');

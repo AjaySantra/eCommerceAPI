@@ -33,10 +33,11 @@ exports.register = function (req, res) {
 
 
 exports.login = function (req, res) {
-    var userID = req.body.UserId;
-    var password = req.body.Password;
+    var _userID = req.body.UserId;
+    var _password = req.body.Password;
     req.getConnection(function (err, connection) {
-        connection.query('SELECT * FROM UserAuthentication WHERE UserID = ?', [userID], function (error, results, fields) {
+        let sql = 'CALL UserAuthentication(?,?)';
+        connection.query(sql, [_userID, _password], (error, results, fields) => {
             if (error) {
                 // console.log("error ocurred",error);
                 res.send({
@@ -46,19 +47,11 @@ exports.login = function (req, res) {
             } else {
                 // console.log('The solution is: ', results);
                 if (results.length > 0) {
-                    if (results[0].Password == password) {
-                        res.send({
-                            "ResponseCode": 200,
-                            "success": "login sucessfull",
-                            Data : results
-                        });
-                    }
-                    else {
-                        res.send({
-                            "ResponseCode": 204,
-                            "success": "User Id and password does not match"
-                        });
-                    }
+                    res.send({
+                        "ResponseCode": 200,
+                        "success": "login sucessfull",
+                        Data: results[0]
+                    });
                 }
                 else {
                     res.send({
@@ -70,6 +63,5 @@ exports.login = function (req, res) {
         });
     });
 }
-
 
 // https://medium.com/technoetics/handling-user-login-and-registration-using-nodejs-and-mysql-81b146e37419
