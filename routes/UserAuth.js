@@ -39,7 +39,6 @@ exports.login = function (req, res) {
         let sql = 'CALL UserAuthentication(?,?)';
         connection.query(sql, [_userID, _password], (error, results, fields) => {
             if (error) {
-                // console.log("error ocurred",error);
                 res.send({
                     "ResponseCode": 400,
                     "failed": "error ocurred"
