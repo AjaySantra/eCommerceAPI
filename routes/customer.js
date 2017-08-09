@@ -14,7 +14,7 @@ exports.list = function (req, res) {
                 var Data = { ErrorMessage: '', ResponseCode: '200', Data: rows };
                 res.send(Data);
             }
-            //    console.log("Error Selecting : %s ",err );
+            //    console.log("Error Selecting : %s ",err ); 
         });
     });
 };
