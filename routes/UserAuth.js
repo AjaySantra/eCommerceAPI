@@ -17,6 +17,8 @@ exports.login = function (req, res) {
     var _userID = req.body.UserId;
     var _password = req.body.Password;
 
+    // console.log(passwordHash.generate(_password));
+
     req.getConnection(function (err, connection) {
         let sql = 'CALL UserAuthentication(?)';
         connection.query(sql, [_userID], (error, results, fields) => {

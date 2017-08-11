@@ -27,7 +27,6 @@ app.set('port', process.env.PORT || 4300);
 app.use(function (req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept,Authorization");
-    
     next();
 });
 var router = express.Router();
@@ -47,6 +46,8 @@ app.use(
         database: 'eCommerceDB'
     }, 'request')
 );
+
+mysql.createConnection({multipleStatements: true});
 
 //===========================================
 // Handle Customer Lavel data
@@ -73,3 +74,5 @@ app.post('/login', UserAuth.login)
 http.createServer(app).listen(app.get('port'), function () {
     console.log('Express server listening on port ' + app.get('port'));
 });
+
+//Hello world
