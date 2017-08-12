@@ -96,7 +96,7 @@ exports.register = function (req, res) {
                 });
             } else {
                 if (results.length > 0) {
-                    if (results[0][0].Message.indexOf('Invalid') <= -1) {
+                    if ((results[0][0].Message.indexOf('Unable') <= -1) && (results[0][0].Message.indexOf('Already') <= -1)) {
                         res.send({
                             "ResponseCode": 200,
                             "ErrorMessage": "",
@@ -122,17 +122,3 @@ exports.register = function (req, res) {
         });
     });
 };
-
-
-
-
-/*
-
-Possible Sinarios
-1) New G User.
-2) New S User.
-3) Existing User.
-4) Existing user with Diffrent Social Network Type.
-5) Existing user with same social network type.
-
-*/

@@ -49,8 +49,9 @@ app.use(
 
 mysql.createConnection({multipleStatements: true});
 
-//===========================================
-// Handle Customer Lavel data
+/*
+* Handle Customer Lavel data
+*/
 var customers = require('./routes/customer');
 
 // app.get('/', routes.index);//route customer list
@@ -61,22 +62,23 @@ app.get('/customer/delete/:id', customers.delete_customer);//edit customer route
 app.get('/customer/edit/:id', customers.edit);
 app.post('/customer/edit/:id', customers.save_edit);
 
-
-//===========================================
-
+/*
+* User Registration (Through email and social network) 
+*/
 var UserAuth = require('./routes/UserAuth');
 //route to handle user registration
 app.post('/register', UserAuth.register);
 app.post('/login', UserAuth.login)
 
-//============================================
-
+/*
+* Store Lavel details
+*/
 var store = require('./routes/store.js')
-
 app.post('/GetStore' , store.GetStore);
 
+/*
+* Start Server @ port 4300
+*/
 http.createServer(app).listen(app.get('port'), function () {
     console.log('Express server listening on port ' + app.get('port'));
 });
-
-//Hello world
