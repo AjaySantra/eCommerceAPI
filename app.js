@@ -71,6 +71,10 @@ app.post('/login', UserAuth.login)
 
 //============================================
 
+var store = require('./routes/store.js')
+
+app.post('/GetStore' , store.GetStore);
+
 http.createServer(app).listen(app.get('port'), function () {
     console.log('Express server listening on port ' + app.get('port'));
 });

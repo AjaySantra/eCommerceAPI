@@ -20,7 +20,7 @@ exports.login = function (req, res) {
     // console.log(passwordHash.generate(_password));
 
     req.getConnection(function (err, connection) {
-        let sql = 'CALL UserAuthentication(?)';
+        let sql = 'CALL CheckUserAuthentication(?)';
         connection.query(sql, [_userID], (error, results, fields) => {
             if (error) {
                 res.send({
@@ -63,7 +63,7 @@ exports.login = function (req, res) {
             }
         });
     });
-}
+};
 
 
 /*
@@ -71,30 +71,68 @@ exports.login = function (req, res) {
 */
 exports.register = function (req, res) {
     // console.log("req",req.body);
-    var today = new Date();
-    var users = {
-        "first_name": req.body.first_name,
-        "last_name": req.body.last_name,
-        "email": req.body.email,
-        "password": req.body.password,
-        "created": today,
-        "modified": today
-    }
-    connection.query('INSERT INTO users SET ?', users, function (error, results, fields) {
-        if (error) {
-            console.log("error ocurred", error);
-            res.send({
-                "code": 400,
-                "failed": "error ocurred"
-            })
-        } else {
-            console.log('The solution is: ', results);
-            res.send({
-                "code": 200,
-                "success": "user registered sucessfully"
-            });
-        }
+   
+        var _firstname = req.body.FirstName;
+        var _lastname = req.body.LastName;
+        var _userId =  req.body.Email;
+        var _password = passwordHash.generate(req.body.Password);
+        var _contactNo =  req.body.ContactNo;
+        var _gender =  req.body.Gender;
+        var _referralCode = req.body.ReferralCode;
+        var _socialToken = req.body.SocialMediaAccessToken;
+        var _socialType = req.body.SocialMediaType;
+        var _isSocial = req.body.IsSocial;
+        var _createdBy = req.body.CreatedBy;
+        var _loginType = req.body.LoginType;
+        var _accessToken = req.body.AccessToken;
+ 
+    req.getConnection(function (err, connection) {
+        let sql = 'CALL UserRegistration(?,?,?,?,?,?,?,?,?,?,?,?,?)';
+        connection.query(sql, [_firstname,_lastname,_userId,_password, _contactNo, _gender, _referralCode,_isSocial, _socialToken,_socialType, _createdBy, _loginType, _accessToken], (error, results, fields) => {
+            if (error) {
+                res.send({
+                    "ResponseCode": 400,
+                    "ErrorMessage": error//"Unknown error ocurred."
+                });
+            } else {
+                if (results.length > 0) {
+                    if (results[0][0].Message.indexOf('Invalid') <= -1) {
+                        res.send({
+                            "ResponseCode": 200,
+                            "ErrorMessage": "",
+                            "Data": results[0]
+                        });
+                    }
+                    else {
+                        res.send({
+                            "ResponseCode": 204,
+                            "ErrorMessage": results[0][0].Message,
+                            "Data": []
+                        });
+                    }
+                }
+                else {
+                    res.send({
+                        "ResponseCode": 204,
+                        "ErrorMessage": "User Id does not exits",
+                        "Data": []
+                    });
+                }
+            }
+        });
     });
-}
+};
 
 
+
+
+/*
+
+Possible Sinarios
+1) New G User.
+2) New S User.
+3) Existing User.
+4) Existing user with Diffrent Social Network Type.
+5) Existing user with same social network type.
+
+*/
