@@ -6,6 +6,8 @@ var passwordHash = require('password-hash');
  * Check User Credentials.
  */
 exports.login = function (req, res) {
+    //console.log(req);
+
     if (req.body.UserId == null || req.body.Password == null) {
         res.send({
             ResponseCode: 400,
@@ -20,6 +22,7 @@ exports.login = function (req, res) {
     // console.log(passwordHash.generate(_password));
 
     req.getConnection(function (err, connection) {
+        
         let sql = 'CALL CheckUserAuthentication(?)';
         connection.query(sql, [_userID], (error, results, fields) => {
             if (error) {
@@ -34,7 +37,7 @@ exports.login = function (req, res) {
                             res.send({
                                 "ResponseCode": 200,
                                 "ErrorMessage": "",
-                                "Data": results[0]
+                                "Data": { User: results[0][0], Cart: results[1][0] }
                             });
                         }
                         else {
@@ -71,24 +74,24 @@ exports.login = function (req, res) {
 */
 exports.register = function (req, res) {
     // console.log("req",req.body);
-   
-        var _firstname = req.body.FirstName;
-        var _lastname = req.body.LastName;
-        var _userId =  req.body.Email;
-        var _password = passwordHash.generate(req.body.Password);
-        var _contactNo =  req.body.ContactNo;
-        var _gender =  req.body.Gender;
-        var _referralCode = req.body.ReferralCode;
-        var _socialToken = req.body.SocialMediaAccessToken;
-        var _socialType = req.body.SocialMediaType;
-        var _isSocial = req.body.IsSocial;
-        var _createdBy = req.body.CreatedBy;
-        var _loginType = req.body.LoginType;
-        var _accessToken = req.body.AccessToken;
- 
+
+    var _firstname = req.body.FirstName;
+    var _lastname = req.body.LastName;
+    var _userId = req.body.Email;
+    var _password = passwordHash.generate(req.body.Password);
+    var _contactNo = req.body.ContactNo;
+    var _gender = req.body.Gender;
+    var _referralCode = req.body.ReferralCode;
+    var _socialToken = req.body.SocialMediaAccessToken;
+    var _socialType = req.body.SocialMediaType;
+    var _isSocial = req.body.IsSocial;
+    var _createdBy = req.body.CreatedBy;
+    var _loginType = req.body.LoginType;
+    var _accessToken = req.body.AccessToken;
+
     req.getConnection(function (err, connection) {
         let sql = 'CALL UserRegistration(?,?,?,?,?,?,?,?,?,?,?,?,?)';
-        connection.query(sql, [_firstname,_lastname,_userId,_password, _contactNo, _gender, _referralCode,_isSocial, _socialToken,_socialType, _createdBy, _loginType, _accessToken], (error, results, fields) => {
+        connection.query(sql, [_firstname, _lastname, _userId, _password, _contactNo, _gender, _referralCode, _isSocial, _socialToken, _socialType, _createdBy, _loginType, _accessToken], (error, results, fields) => {
             if (error) {
                 res.send({
                     "ResponseCode": 400,
@@ -100,7 +103,7 @@ exports.register = function (req, res) {
                         res.send({
                             "ResponseCode": 200,
                             "ErrorMessage": "",
-                            "Data": results[0]
+                            "Data": { User: results[0][0], Cart: results[1][0] }
                         });
                     }
                     else {

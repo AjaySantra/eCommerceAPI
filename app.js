@@ -22,6 +22,7 @@ app.use(bodyParser.json());
 
 // var router = express.Router();  
 // all environments
+// app.set('port', process.env.PORT || 4300);
 app.set('port', process.env.PORT || 4300);
 
 app.use(function (req, res, next) {
@@ -43,11 +44,12 @@ app.use(
         user: 'root',
         password: 'ajay@123',
         port: 3306, //port mysql
-        database: 'eCommerceDB'
+        database: 'EcommerceDB',
+        multipleStatements: true
     }, 'request')
 );
 
-mysql.createConnection({multipleStatements: true});
+// mysql.createConnection({multipleStatements: true});
 
 /*
 * Handle Customer Lavel data
@@ -79,6 +81,7 @@ app.post('/GetStore' , store.GetStore);
 /*
 * Start Server @ port 4300
 */
-http.createServer(app).listen(app.get('port'), function () {
+//http.createServer(app).listen(app.get('port'),'192.168.2.9', function () {
+app.listen(app.get('port'),'192.168.2.9', function () {
     console.log('Express server listening on port ' + app.get('port'));
 });
