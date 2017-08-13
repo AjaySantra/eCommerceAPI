@@ -22,7 +22,7 @@ exports.login = function (req, res) {
     // console.log(passwordHash.generate(_password));
 
     req.getConnection(function (err, connection) {
-        
+
         let sql = 'CALL CheckUserAuthentication(?)';
         connection.query(sql, [_userID], (error, results, fields) => {
             if (error) {
