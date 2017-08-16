@@ -1,4 +1,18 @@
-'use strict';
+"use strict";
+var fs = require('fs');
+
+var logger = require('tracer').console({
+    transport: function (data) {
+        // console.log(data.output);
+        fs.open('./TraceLog.log', 'a', parseInt('0644', 8), function (e, id) {
+            fs.write(id, data.output + "\n", null, 'utf8', function () {
+                fs.close(id, function () {
+                });
+            });
+        });
+    }
+});
+
 
 /*
  * GET customers listing.
@@ -8,10 +22,12 @@ exports.list = function (req, res) {
         connection.query('SELECT * FROM Customers', function (err, rows) {
             if (err) {
                 var Data = { ErrorMessage: 'Data Not Found..', ResponseCode: '401', Data: rows };
+                logger.error('Customer', 'CustomerList', Data, req.body, [4], err);
                 res.send(Data);
             }
             else {
                 var Data = { ErrorMessage: '', ResponseCode: '200', Data: rows };
+                logger.info('Customer', 'CustomerList', Data, req.body);
                 res.send(Data);
             }
             //    console.log("Error Selecting : %s ",err ); 

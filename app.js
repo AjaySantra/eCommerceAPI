@@ -20,9 +20,7 @@ var mysql = require('mysql');
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-// var router = express.Router();  
 // all environments
-// app.set('port', process.env.PORT || 4300);
 app.set('port', process.env.PORT || 4300);
 
 app.use(function (req, res, next) {
@@ -36,14 +34,12 @@ router.get('/', function (req, res) {
     res.json({ message: 'welcome to our upload module apis' });
 });
 
-// app.use('/api', router);
-// app.listen(5000);
 app.use(
     connection(mysql, {
         host: '127.0.0.1',
         user: 'root',
         password: 'ajay@123',
-        port: 3306, //port mysql
+        port: 3306, 
         database: 'EcommerceDB',
         multipleStatements: true
     }, 'request')
@@ -56,32 +52,32 @@ app.use(
 */
 var customers = require('./routes/customer');
 
-// app.get('/', routes.index);//route customer list
 app.get('/customer', customers.list);//route add customer, get n post
 app.get('/customer/add', customers.add);
-app.post('/customer/add', customers.save);//route delete customer
-app.get('/customer/delete/:id', customers.delete_customer);//edit customer route , get n post
-app.get('/customer/edit/:id', customers.edit);
-app.post('/customer/edit/:id', customers.save_edit);
 
 /*
 * User Registration (Through email and social network) 
 */
 var UserAuth = require('./routes/UserAuth');
-//route to handle user registration
 app.post('/register', UserAuth.register);
 app.post('/login', UserAuth.login)
+app.post('user/udpate', UserAuth.Update)
 
 /*
 * Store Lavel details
 */
 var store = require('./routes/store.js')
-app.post('/GetStore' , store.GetStore);
+app.post('/Store/Get' , store.GetStore);
+
+/*
+* Address Lavel details
+*/
+var address = require('./routes/Address.js')
+app.post('/address/add' , address.Add);
 
 /*
 * Start Server @ port 4300
 */
-//http.createServer(app).listen(app.get('port'),'192.168.2.9', function () {
-app.listen(app.get('port'),'192.168.2.9', function () {
+app.listen(app.get('port'), function () {
     console.log('Express server listening on port ' + app.get('port'));
 });
