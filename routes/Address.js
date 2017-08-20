@@ -1,17 +1,6 @@
 "use strict";
-var fs = require('fs');
 
-var logger = require('tracer').console({
-    transport: function (data) {
-        // console.log(data.output);
-        fs.open('./trace.log', 'a', parseInt('0644', 8), function (e, id) {
-            fs.write(id, data.output + "\n", null, 'utf8', function () {
-                fs.close(id, function () {
-                });
-            });
-        });
-    }
-});
+var logger = require("./logger");
 
 /*
 * Add Address (Name , UserID , Line 1 , Phone 1) 
@@ -19,8 +8,7 @@ var logger = require('tracer').console({
 exports.Add = function (req, res) {
 
     if (req.body.Name == null || req.body.UserId == null || req.body.Line1 == null || req.body.Phone1 == null) {
-        logger.error('Address', 'AddAddress', results[0], req.body, [4], 'Please send the value in {"Name":"","UserId":"","Line1":"","Phone1":"",} format.');
-        
+        logger.error('Please send the value in {"Name":"","UserId":"","Line1":"","Phone1":"",} format.', { 'req': req.body });
         res.send({
             ResponseCode: 400,
             ErrorMessage: 'Please send the value in {"Name":"","UserId":"","Line1":"","Phone1":"",} format.',
@@ -47,43 +35,44 @@ exports.Add = function (req, res) {
     req.getConnection(function (err, connection) {
         let sql = 'CALL AddAddressDetails(?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
         connection.query(sql, [_name, _userId, _userType, _line1, _line2, _line3,
-             _landmark, _state, _city, _pincode, _country, _phone1, _phone2, _isDefault]
-             , (error, results, fields) => {
-            if (error) {
-                logger.error('Address', 'GetAddress', results[0], req.body, [4], error);
-                res.send({
-                    "ResponseCode": 400,
-                    "ErrorMessage": "Error while add new address."
-                });
-            } else {
-                if (results.length > 0) {
-                    if ((results[0][0].Message.indexOf('Error') <= -1)) {
-                        logger.info('Address', 'AddAddress', results[0], req.body);
-                        res.send({
-                            "ResponseCode": 200,
-                            "ErrorMessage": "",
-                            "Data": { User: results[0][0], Cart: results[1][0] }
-                        });
+            _landmark, _state, _city, _pincode, _country, _phone1, _phone2, _isDefault]
+            , (error, results, fields) => {
+                if (error) {
+                    logger.error(error, { 'req': req.body });
+                    res.send({
+                        "ResponseCode": 400,
+                        "ErrorMessage": "Error while add new address.",
+                        "Data": {}
+                    });
+                } else {
+                    if (results.length > 0) {
+                        if ((results[0][0].Message.indexOf('Error') <= -1)) {
+                            logger.info(results[0], { 'req': req.body });
+                            res.send({
+                                "ResponseCode": 200,
+                                "ErrorMessage": "",
+                                "Data": { User: results[0][0], Cart: results[1][0] }
+                            });
+                        }
+                        else {
+                            logger.error(results[0][0].Message, { 'req': req.body });
+                            res.send({
+                                "ResponseCode": 204,
+                                "ErrorMessage": results[0][0].Message,
+                                "Data": {}
+                            });
+                        }
                     }
                     else {
-                        logger.info('Address', 'AddAddress', results[0], req.body);
+                        logger.error('Error while add new address.', { 'req': req.body });
                         res.send({
                             "ResponseCode": 204,
-                            "ErrorMessage": results[0][0].Message,
+                            "ErrorMessage": "Error while add new address.",
                             "Data": {}
                         });
                     }
                 }
-                else {
-                    logger.info('Address', 'AddAddress', results[0], req.body);
-                    res.send({
-                        "ResponseCode": 204,
-                        "ErrorMessage": "Error while add new address.",
-                        "Data": {}
-                    });
-                }
-            }
-        });
+            });
     });
 };
 
@@ -92,10 +81,10 @@ exports.Add = function (req, res) {
 */
 exports.Get = function (req, res) {
     if (req.body.UserId == null) {
-        logger.error('Address', 'Get Address', results[0], req.body, [4], 'Please send the value in {"UserId":""} format.');
+        logger.error("Please send the value in {'UserId':''} formet", { 'req': req.body });
         res.send({
             ResponseCode: 400,
-            ErrorMessage: 'Please send the value in {"UserId":""} format.',
+            ErrorMessage: 'Please send the value in {"UserId":""} formet.',
             Data: {}
         });
         return;
@@ -105,22 +94,23 @@ exports.Get = function (req, res) {
         let sql = 'CALL GetAddressDetails(?)';
         connection.query(sql, [_userId], (error, results, fields) => {
             if (error) {
-                logger.error('Address', 'GetAddress', results[0], req.body, [4], error);
+                logger.error(error, { 'req': req.body });
                 res.send({
                     "ResponseCode": 400,
-                    "ErrorMessage": "Error while geting user address."
+                    "ErrorMessage": "Error while geting user address.",
+                    "Data": {}
                 });
             } else {
                 if (results[0].length > 0) {
-                    logger.info('Address', 'GetAddress', results[0], req.body);
+                    logger.info(results[0], { 'req': req.body });
                     res.send({
                         "ResponseCode": 200,
                         "ErrorMessage": "",
-                        "Data": { Address : results[0]}
+                        "Data": { Address: results[0] }
                     });
                 }
                 else {
-                    logger.info('Address', 'GetAddress', results[0], req.body);
+                    logger.error("User Address not found..", { 'req': req.body });
                     res.send({
                         "ResponseCode": 204,
                         "ErrorMessage": "User Address not found..",

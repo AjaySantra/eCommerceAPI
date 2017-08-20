@@ -36,7 +36,7 @@ app.use(
     connection(mysql, {
         host: '127.0.0.1',
         user: 'root',
-        password: 'root',
+        password: 'ajay@123',
         port: 3306, 
         database: 'EcommerceDB',
         multipleStatements: true
@@ -72,7 +72,7 @@ app.post('/address/add' , address.Add);
 app.post('/address/get' , address.Get);
 
 /*
-* Start Server @ port 4300
+* Start Server @ port 8000
 */
 app.listen(app.get('port'), function () {
     console.log('Express server listening on port ' + app.get('port'));

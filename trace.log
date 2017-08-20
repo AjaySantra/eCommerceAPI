@@ -1148,3 +1148,15 @@
     PhoneNo1: '9856236512',
     PhoneNo2: '',
     IsDefault: 0 } ] { UserId: 'shiv@gmail.com' }
+2017-08-20T20:49:58+0530 <info> store.js:40 (Query.connection.query [as _callback]) Get Store Store [ RowDataPacket {
+    StoreId: 'ST001',
+    EmailId: 'store@eco.com',
+    StoreName: 'store 1',
+    FullName: 'store  lname',
+    MobileNo: '987654321',
+    ContactNo: '22-6009876',
+    CustomerCareNumber: '1800123456',
+    Latitude: '18.5679387',
+    Longitude: '73.785364',
+    SellerName: 'Saller Pvt. Ltd.',
+    SellerId: 'S0001' } ] { StoreId: 'store@eco.com' }

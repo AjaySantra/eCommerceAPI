@@ -1,21 +1,34 @@
 "use strict";
-var fs = require('fs');
 
-var logger = require('tracer').console({
-	transport : function(data) {
-		console.log(data.output);
-		fs.open('./trace.log', 'a', parseInt('0644', 8), function(e, id) {
-			fs.write(id, data.output+"\n", null, 'utf8', function() {
-				fs.close(id, function() {
-				});
-			});
-		});
-	}
+// npm install winston --save
+
+var winston = require('winston');
+winston.emitErrs = true;
+
+var logger = new winston.Logger({
+    transports: [
+        new winston.transports.File({
+            level: 'info',
+            filename: './logs/all-logs.log',
+            handleExceptions: true,
+            json: true,
+            maxsize: 5242880, //5MB
+            maxFiles: 5,
+            colorize: false
+        }),
+        new winston.transports.Console({
+            level: 'debug',
+            handleExceptions: true,
+            json: false,
+            colorize: true
+        })
+    ],
+    exitOnError: false
 });
 
-// logger.log('hello');
-// logger.trace('hello', 'world');
-// logger.debug('hello %s', 'world', 123);
-// logger.info('hello %s %d', 'world', 123, {foo : 'bar'});
-// logger.warn('hello %s %d %j', 'world', 123, {foo : 'bar'});
-// logger.error('hello %s %d %j', 'world', 123, {foo : 'bar'}, [ 1, 2, 3, 4 ], Object);
+module.exports = logger;
+module.exports.stream = {
+    write: function(message, encoding){
+        logger.info(message);
+    }
+};
