@@ -3,12 +3,15 @@
 // npm install winston --save
 
 var winston = require('winston');
+var date = new Date();
+var curr_Date = date.getDate() + '-' + date.getMonth() + '-' + date.getFullYear();
+
 winston.emitErrs = true;
 var logger = new winston.Logger({
     transports: [
         new winston.transports.File({
             level: 'info',
-            filename: './logs/all-logs.log',
+            filename: './logs/logs_' + curr_Date + '.log',
             handleExceptions: true,
             json: true,
             maxsize: 5242880, //5MB
@@ -27,7 +30,7 @@ var logger = new winston.Logger({
 
 module.exports = logger;
 module.exports.stream = {
-    write: function(message, encoding){
+    write: function (message, encoding) {
         logger.info(message);
     }
 };

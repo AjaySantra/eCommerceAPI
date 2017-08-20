@@ -48,7 +48,6 @@ exports.Get = function (req, res) {
     });
 };
 
-
 /*
 * Add Address (Name , UserID , Line 1 , Phone 1) 
 */
