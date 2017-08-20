@@ -3,7 +3,7 @@ var fs = require('fs');
 
 var logger = require('tracer').console({
     transport: function (data) {
-        // console.log(data.output);
+       console.log(data.output);
         fs.open('./TraceLog.log', 'a', parseInt('0644', 8), function (e, id) {
             fs.write(id, data.output + "\n", null, 'utf8', function () {
                 fs.close(id, function () {
@@ -28,7 +28,7 @@ exports.login = function (req, res) {
         res.send({
             ResponseCode: 400,
             ErrorMessage: 'Please send the value in {"UserId":"","Password":""} format.',
-            Data: []
+            Data: {}
         });
         return;
     }
@@ -63,7 +63,7 @@ exports.login = function (req, res) {
                             res.send({
                                 "ResponseCode": 204,
                                 "ErrorMessage": "Password not match.",
-                                "Data": []
+                                "Data": {}
                             });
                         }
                     }
@@ -72,7 +72,7 @@ exports.login = function (req, res) {
                         res.send({
                             "ResponseCode": 204,
                             "ErrorMessage": results[0][0].Message,
-                            "Data": []
+                            "Data": {}
                         });
                     }
                 }
@@ -81,7 +81,7 @@ exports.login = function (req, res) {
                     res.send({
                         "ResponseCode": 204,
                         "ErrorMessage": "User Id does not exits",
-                        "Data": []
+                        "Data": {}
                     });
                 }
             }
@@ -136,7 +136,7 @@ exports.register = function (req, res) {
                         res.send({
                             "ResponseCode": 204,
                             "ErrorMessage": results[0][0].Message,
-                            "Data": []
+                            "Data": {}
                         });
                     }
                 }
@@ -145,7 +145,7 @@ exports.register = function (req, res) {
                     res.send({
                         "ResponseCode": 204,
                         "ErrorMessage": "User Id does not exits",
-                        "Data": []
+                        "Data": {}
                     });
                 }
             }
@@ -158,7 +158,7 @@ exports.register = function (req, res) {
 * User Details Update (Through email and social network) 
 */
 exports.Update = function (req, res) {
-    // console.log("req",req.body);
+    console.log("req",req.body);
 
     if (req.body.UserId == null) {
         logger.error('UserAuth', 'UserUpdate', results[0], req.body, [4], 'Please send the value in {"UserId":""} format.');
@@ -166,7 +166,7 @@ exports.Update = function (req, res) {
         res.send({
             ResponseCode: 400,
             ErrorMessage: 'Please send the value in {"UserId":""} format.',
-            Data: []
+            Data: {}
         });
         return;
     }
@@ -201,7 +201,7 @@ exports.Update = function (req, res) {
                         res.send({
                             "ResponseCode": 204,
                             "ErrorMessage": results[0][0].Message,
-                            "Data": []
+                            "Data": {}
                         });
                     }
                 }
@@ -210,7 +210,7 @@ exports.Update = function (req, res) {
                     res.send({
                         "ResponseCode": 204,
                         "ErrorMessage": "User Id does not exits",
-                        "Data": []
+                        "Data": {}
                     });
                 }
             }

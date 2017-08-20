@@ -9,7 +9,6 @@ var http = require('http');
 var path = require('path');
 var bodyParser = require('body-parser');
 
-
 //load customers route
 var app = express();
 var connection = require('express-myconnection');
@@ -21,7 +20,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 // all environments
-app.set('port', process.env.PORT || 4300);
+app.set('port', process.env.PORT || 8000);
 
 app.use(function (req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
@@ -29,7 +28,6 @@ app.use(function (req, res, next) {
     next();
 });
 var router = express.Router();
-// test route
 router.get('/', function (req, res) {
     res.json({ message: 'welcome to our upload module apis' });
 });
@@ -38,42 +36,40 @@ app.use(
     connection(mysql, {
         host: '127.0.0.1',
         user: 'root',
-        password: 'ajay@123',
+        password: 'root',
         port: 3306, 
         database: 'EcommerceDB',
         multipleStatements: true
     }, 'request')
 );
 
-// mysql.createConnection({multipleStatements: true});
-
 /*
 * Handle Customer Lavel data
 */
 var customers = require('./routes/customer');
-
 app.get('/customer', customers.list);//route add customer, get n post
 app.get('/customer/add', customers.add);
 
 /*
 * User Registration (Through email and social network) 
 */
-var UserAuth = require('./routes/UserAuth');
+var UserAuth = require('./routes/userAuth');
 app.post('/register', UserAuth.register);
 app.post('/login', UserAuth.login)
-app.post('user/udpate', UserAuth.Update)
+app.post('/user/udpate', UserAuth.Update)
 
 /*
 * Store Lavel details
 */
 var store = require('./routes/store.js')
-app.post('/Store/Get' , store.GetStore);
+app.post('/store/Get' , store.GetStore);
 
 /*
 * Address Lavel details
 */
-var address = require('./routes/Address.js')
+var address = require('./routes/address.js')
 app.post('/address/add' , address.Add);
+app.post('/address/get' , address.Get);
 
 /*
 * Start Server @ port 4300
