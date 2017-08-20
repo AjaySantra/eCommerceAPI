@@ -4,7 +4,7 @@ var fs = require('fs');
 var logger = require('tracer').console({
     transport: function (data) {
        console.log(data.output);
-        fs.open('./TraceLog.log', 'a', parseInt('0644', 8), function (e, id) {
+        fs.open('./trace.log', 'a', parseInt('0644', 8), function (e, id) {
             fs.write(id, data.output + "\n", null, 'utf8', function () {
                 fs.close(id, function () {
                 });
