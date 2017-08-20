@@ -47,7 +47,7 @@ app.use(
 * Handle Customer Lavel data
 */
 var customers = require('./routes/customer');
-app.get('/customer', customers.list);//route add customer, get n post
+app.get('/customer', customers.list);
 app.get('/customer/add', customers.add);
 
 /*
