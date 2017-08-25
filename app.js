@@ -62,7 +62,9 @@ app.post('/user/udpate', UserAuth.Update)
 * Store Lavel details
 */
 var store = require('./routes/store.js')
-app.post('/store/Get' , store.GetStore);
+app.post('/store/get' , store.GetStore);
+app.post('/store/add' , store.Add);
+app.post('/store/update' , store.Update);
 
 /*
 * Address Lavel details
@@ -70,6 +72,16 @@ app.post('/store/Get' , store.GetStore);
 var address = require('./routes/address.js')
 app.post('/address/add' , address.Add);
 app.post('/address/get' , address.Get);
+app.post('/address/update' , address.Update);
+
+/*
+ *Seller Lavel details 
+ */
+var seller = require('./routes/seller.js')
+app.post('/seller/add' , seller.Add);
+app.post('/seller/get' , seller.Get);
+app.post('/seller/update' , seller.Update);
+
 
 /*
 * Start Server @ port 8000
