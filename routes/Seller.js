@@ -1,6 +1,7 @@
 "use strict";
 
 var logger = require("./logger");
+var passwordHash = require('password-hash');
 
 /*
 * Seller details (filter ) 
@@ -44,14 +45,14 @@ exports.Get = function (req, res) {
 }
 
 /*
-* Add Seller (Name , UserID , Line 1 , Phone 1) 
+* Add Seller (Name , UserID, Password, LoginType , Line 1 , Phone 1) 
 */
 exports.Add = function (req, res) {
-    if (req.body.CompanyName == null || req.body.UserId == null || req.body.FirstName == null || req.body.MobileNo == null) {
-        logger.error('Please send the value in {"UserId":"","CompanyName":"","FirstName":"","MobileNo":"",} format.', { 'req': req.body , 'function': 'Seller,Add'});
+    if (req.body.CompanyName == null || req.body.UserId == null || req.body.Password == null || req.body.LoginType == null || req.body.FirstName == null || req.body.MobileNo == null) {
+        logger.error('Please send the value in {"UserId":"","CompanyName":"","Password":"","LoginType":"","FirstName":"","MobileNo":""} format.', { 'req': req.body , 'function': 'Seller,Add'});
         res.send({
             ResponseCode: 400,
-            ErrorMessage: 'Please send the value in {"UserId":"","CompanyName":"","FirstName":"","MobileNo":"",} format.',
+            ErrorMessage: 'Please send the value in {"UserId":"","CompanyName":"","Password":"","LoginType":"","FirstName":"","MobileNo":""} format.',
             Data: {}
         });
         return;
@@ -65,10 +66,15 @@ exports.Add = function (req, res) {
     var _mobileNo = req.body.MobileNo;
     var _ccNumber = req.body.CCNumber;
     var _createdBy = req.body.CreatedBy;
+    var _password = '';
+    if (req.body.Password)
+        _password = passwordHash.generate(req.body.Password);
+    var _loginType = req.body.LoginType;
 
     req.getConnection(function (err, connection) {
-        let sql = 'CALL AddSellerDetails(?,?,?,?,?,?,?,?,?)';
-        connection.query(sql, [ _userId, _firstName, _lastName, _compnayName, _gender, _landlineNo, _mobileNo, _ccNumber, _createdBy]
+        let sql = 'CALL AddSellerDetails(?,?,?,?,?,?,?,?,?,?,?)';
+        connection.query(sql, [ _userId, _firstName, _lastName, _compnayName, _gender, _landlineNo, 
+            _mobileNo, _ccNumber, _createdBy, _password, _loginType]
             , (error, results, fields) => {
                 if (error) {
                     logger.error(error, { 'req': req.body , 'function': 'Seller,Add'});
@@ -110,7 +116,7 @@ exports.Add = function (req, res) {
 };
 
 /*
-* Update Address (ID, Name, UserID, Line 1, Phone 1) 
+* Update Seller (ID, Name, UserID,, Password, LoginType Line 1, Phone 1) 
 */
 exports.Update = function (req, res) {
     if (req.body.ID == null ||  req.body.CompanyName == null || req.body.UserId == null || req.body.FirstName == null || req.body.MobileNo == null) {

@@ -1,5 +1,6 @@
 "use strict";
 var logger = require("./logger");
+var passwordHash = require('password-hash');
 
 /*
 * Store details (filter ) 
@@ -48,11 +49,11 @@ exports.GetStore = function (req, res) {
 */
 exports.Add = function (req, res) {
 
-    if (req.body.StoreName == null || req.body.UserId == null || req.body.SellerId == null || req.body.MobileNo == null) {
-        logger.error('Please send the value in {"StoreName":"","UserId":"","SellerId":"","MobileNo":"",} format.', { 'req': req.body, 'function': 'Store,Add' });
+    if (req.body.StoreName == null || req.body.UserId == null || req.body.Password == null || req.body.LoginType == null || req.body.SellerId == null || req.body.MobileNo == null) {
+        logger.error('Please send the value in {"StoreName":"","UserId":"","Password":"","LoginType":"","SellerId":"","MobileNo":""} format.', { 'req': req.body, 'function': 'Store,Add' });
         res.send({
             ResponseCode: 400,
-            ErrorMessage: 'Please send the value in {"StoreName":"","UserId":"","SellerId":"","MobileNo":"",} format.',
+            ErrorMessage: 'Please send the value in {"StoreName":"","UserId":"","Password":"","LoginType":"","SellerId":"","MobileNo":""} format.',
             Data: {}
         });
         return;
@@ -70,11 +71,15 @@ exports.Add = function (req, res) {
     var _latitude = req.body.Latitude;
     var _longitude = req.body.Longitude;
     var _createdBy = req.body.CreatedBy;
+    var _password = '';
+    if (req.body.Password)
+        _password = passwordHash.generate(req.body.Password);
+    var _loginType = req.body.LoginType;
 
     req.getConnection(function (err, connection) {
-        let sql = 'CALL AddStoreDetails(?,?,?,?,?,?,?,?,?,?,?,?)';
+        let sql = 'CALL AddStoreDetails(?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
         connection.query(sql, [_userId, _sellerId, _storeName, _firstName, _lastName, _mobileNo,
-            _landlineNo, _ccNumber, _specialOfferEmails, _latitude, _longitude, _createdBy]
+            _landlineNo, _ccNumber, _specialOfferEmails, _latitude, _longitude, _createdBy, _password, _loginType]
             , (error, results, fields) => {
                 if (error) {
                     logger.error(error, { 'req': req.body, 'function': 'Store,Add' });
