@@ -34,7 +34,7 @@ exports.GetStore = function (req, res) {
                     logger.error("Store Id does not exits", { 'req': req.body, 'function': 'Store,GetStore' });
                     res.send({
                         "ResponseCode": 204,
-                        "ErrorMessage": "Store Id does not exits",
+                        "ErrorMessage": "Store Id does not exits.",
                         "Data": {}
                     });
                 }

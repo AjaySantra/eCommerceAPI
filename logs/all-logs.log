@@ -1,5 +1,0 @@
- {"level":"error","message":"req[object Object]","timestamp":"2017-08-20T16:20:25.098Z"}
-{"level":"error","message":"req[object Object]","timestamp":"2017-08-20T16:20:34.067Z"}
-{"req":{"UsessrId":"gouravpal@gm.com"},"level":"error","message":"","timestamp":"2017-08-20T16:21:19.031Z"}
-{"req":{"UsessrId":"gouravpal@gm.com"},"level":"error","message":"Hello","timestamp":"2017-08-20T16:22:24.538Z"}
-{"req":{"UserId":"gourav.niitstudent@gmail.com","Password":""},"function":"UserAuth,login","level":"error","message":"Invalid User ID.","timestamp":"2017-08-20T16:46:24.389Z"}

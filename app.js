@@ -82,6 +82,23 @@ app.post('/seller/add' , seller.Add);
 app.post('/seller/get' , seller.Get);
 app.post('/seller/update' , seller.Update);
 
+/*
+ *Category Lavel details 
+ */
+var category = require('./routes/category.js')
+// app.post('/seller/add' , seller.Add);
+app.post('/category/get' , category.Get);
+// app.post('/seller/update' , seller.Update);
+
+
+/*
+ * Dashboard Lavel details 
+ */
+var dashboard = require('./routes/dashboard.js')
+// app.post('/seller/add' , seller.Add);
+app.post('/dashboard/get' , dashboard.Get);
+// app.post('/seller/update' , seller.Update);
+
 
 /*
 * Start Server @ port 8000
