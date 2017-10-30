@@ -1,8 +1,5 @@
 'use strict';
 
-/**
- * Module dependencies.
- */
 var express = require('express');
 var routes = require('./routes');
 var http = require('http');
@@ -95,9 +92,7 @@ app.post('/category/get' , category.Get);
  * Dashboard Lavel details 
  */
 var dashboard = require('./routes/dashboard.js')
-// app.post('/seller/add' , seller.Add);
 app.post('/dashboard/get' , dashboard.Get);
-// app.post('/seller/update' , seller.Update);
 
 
 /*
